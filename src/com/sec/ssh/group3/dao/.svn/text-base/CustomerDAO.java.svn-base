@@ -1,0 +1,32 @@
+package com.sec.ssh.group3.dao;
+
+import java.util.ArrayList;
+
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import com.sec.ssh.group3.entity.Customer;
+
+public class CustomerDAO  extends HibernateDaoSupport  implements ICustomerDAO {
+
+	public void addCustomer(Customer c) {
+		// TODO Auto-generated method stub
+		this.getHibernateTemplate().save(c);
+	}
+
+	public ArrayList<Customer> findAllCustomer() {
+		// TODO Auto-generated method stub
+		return (ArrayList<Customer>)this.getHibernateTemplate().find("from Customer");
+		
+	}
+
+	public void updateCustomer(Customer c) {
+		// TODO Auto-generated method stub
+		this.getHibernateTemplate().saveOrUpdate(c);
+	}
+
+	public Customer findCustomerById(int cid) {
+		// TODO Auto-generated method stub
+		return (Customer) this.getHibernateTemplate().get(Customer.class, cid);
+	}
+
+}

@@ -1,0 +1,11 @@
+package com.sec.ssh.group3.biz;
+import java.util.ArrayList;
+import com.sec.ssh.group3.entity.*;
+public interface ICustomerServerBiz
+{
+	 ArrayList<Send> findAllSend();
+	 ArrayList<Deliver> findAllDeliver();
+	 ArrayList<Orders> findAllOrder();
+	 Send findOneSend(int sid);
+	 void updSendById(int sid,Send s);
+}

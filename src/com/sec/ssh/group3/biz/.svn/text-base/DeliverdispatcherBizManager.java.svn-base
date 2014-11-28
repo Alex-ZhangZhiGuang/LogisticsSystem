@@ -1,0 +1,60 @@
+package com.sec.ssh.group3.biz;
+import com.sec.ssh.group3.dao.IDeliverdispatcherDAOManager;
+import com.sec.ssh.group3.entity.*;
+
+import java.util.*;
+
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+public class DeliverdispatcherBizManager implements IDeliverdispatcherBizManager
+{
+	//ÇÉÀö
+	private IDeliverdispatcherDAOManager drDao;
+	public IDeliverdispatcherDAOManager getDrDao() 
+	{
+		return drDao;
+	}
+
+	public void setDrDao(IDeliverdispatcherDAOManager drDao) 
+	{
+		this.drDao = drDao;
+	}
+
+	public void addDeliverDispatchers(List<Deliverdispatcher> dr) 
+	{
+		for(Deliverdispatcher list:dr)
+			drDao.addDeliverDispatcher(list);
+	}
+
+	public ArrayList<Deliverdispatcher> findAllDeliverDispatcher() 
+	{
+		return drDao.findAllDeliverDispatcher();
+	}
+
+	public Deliverdispatcher findDeliverDispatcherById(int drid) 
+	{
+		return drDao.findDeliverDispatcherById(drid);
+	}
+
+	public ArrayList<Orders> likeFindByArriveDate(String arriveDate) 
+	{
+		return null;
+	}
+
+	public void updDeliverdispatcher(int drid,Deliverdispatcher dr) 
+	{
+		drDao.updDeliverdispatcher(drid, dr);
+	}
+
+	public Senddispatcher findOneSenddispatcher(int sdid) 
+	{
+		return drDao.findOneSenddispatcher(sdid);
+	}
+
+	public void updSenddispatcherById(List<Senddispatcher> sd) 
+	{
+		for(Senddispatcher list:sd)
+			drDao.updSenddispatcherById(list);
+	}	
+	
+}
+

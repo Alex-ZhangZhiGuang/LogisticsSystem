@@ -1,0 +1,16 @@
+package com.sec.ssh.group3.biz;
+import com.sec.ssh.group3.entity.*;
+
+import  java.util.*;
+public interface ISenddispatcherBizManager 
+{
+	//гиюЖ
+	Senddispatcher findSendDispatcherById(int sdid);
+	ArrayList<Senddispatcher> findAllSendDispatcher();
+	ArrayList<Senddispatcher> findAllSenddispatcherByisdeal();
+	void addSendDispatcher(List<Senddispatcher> sd);
+	void updSenddispatcher(int sdid,Senddispatcher sd);
+	ArrayList<Send> findAllSend();
+	Send findOneSend(int sid);
+	void updSendById(List<Send> s);
+}

@@ -1,0 +1,256 @@
+package com.sec.ssh.group3.action;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.opensymphony.xwork2.ActionContext;
+import com.sec.ssh.group3.biz.ISortingBizManager;
+import com.sec.ssh.group3.entity.Ordercustomer;
+import com.sec.ssh.group3.entity.Orders;
+import com.sec.ssh.group3.entity.Sorting;
+import com.sec.ssh.group3.entity.User;
+import com.sec.ssh.group3.entity.Warehouse;
+
+public class SortingAction {
+	private ISortingBizManager sbiz;
+	private ArrayList<Sorting> list;
+	private ArrayList<Warehouse> whlist;
+	private Warehouse wh;
+    private Sorting s;
+    private String chkAll;
+    private int sortid;
+	private User user;
+	private Orders orders;
+	private int oid;
+	private String weight;
+	private String paidweight;
+	private int productnumber;
+	private Date sortingdate;
+	private Date time;
+	private String remark;
+	private String userid;
+	public String getUserid() {
+		return userid;
+	}
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+	public int getOid() {
+		return oid;
+	}
+	public void setOid(int oid) {
+		this.oid = oid;
+	}
+	public ISortingBizManager getBiz() {
+		return sbiz;
+	}
+	public void setBiz(ISortingBizManager sbiz) {
+		this.sbiz = sbiz;
+	}
+	public ArrayList<Sorting> getList() {
+		return list;
+	}
+	public void setList(ArrayList<Sorting> list) {
+		this.list = list;
+	}
+	public Sorting getS() {
+		return s;
+	}
+	public void setS(Sorting s) {
+		this.s = s;
+	}
+	public String add()
+	{
+		try
+		{
+			List<Sorting> sList=new ArrayList<Sorting>();
+			List<Warehouse> wList=new ArrayList<Warehouse>();
+			String[] str=chkAll.split(", ");
+			for(String s:str)
+			{
+				System.out.println("********************************"+s);
+				Sorting sort=new Sorting();
+				wh=sbiz.findWarehouseById(Integer.valueOf(s));
+				Orders os=new Orders();
+				os.setOid(wh.getOrders().getOid());
+				sort.setOrders(os);
+				User u=sbiz.findUserById(userid);
+				sort.setUser(u);
+				sort.setWeight(weight);
+				sort.setPaidweight(paidweight);
+				sort.setProductnumber(productnumber);
+				sort.setSortingdate(sortingdate);
+				sort.setSortingtime(sortingdate);
+				sort.setRemark(remark);
+				wh.setIssort(1);
+				wList.add(wh);
+				sList.add(sort);
+			}
+			sbiz.addSorting(sList);
+			sbiz.updWarehouse(wList);
+			return "add_success";
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			 return "error";
+		}
+	}
+	public String findall()
+	{
+		try
+		{
+		list=sbiz.findAllRecord();
+		if(list.size()>0)
+		{
+			//ActionContext.getContext().getSession().put("slist", list);
+			for(Sorting s:list)
+			{
+				System.out.println("订单编号:"+s.getSortid()+"实际重量:"+s.getWeight()+"计费重量:"+s.getPaidweight()+"运输件数:"+s.getProductnumber()+"分拣日期:"+s.getSortingdate()+"分拣时间:"+s.getSortingtime()+"分拣人:"+s.getUser().getUserid()+"联系方式:"+s.getUser().getUserphone()+"分拣备注:"+s.getRemark());
+			}
+			return "suc_list";
+		}
+		
+		return "error";
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return "error";
+		}
+	}
+	public String findSortingDo()
+	{
+		try
+		{
+			whlist=sbiz.findSortingDo();
+			if(whlist.size()>0)
+				return "success";
+			return "error";
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return "error";
+		}
+		    
+	}
+	 public String findSortingById()
+	 {
+		 try{
+		 s=sbiz.findSortingById(s.getSortid());
+		 System.out.println(s); 
+	      if(s!=null)
+	      return "success";
+	      return "error";
+		 }
+		 catch(Exception e)
+		 {
+			 e.printStackTrace();
+			 return "error";
+		 }
+	 }
+	public String updSorting()
+	{
+		try{
+		      s=sbiz.findSortingById(s.getSortid());
+		      if(s!=null)
+		        {
+			        sbiz.updateSorting(s);
+			         return findall();
+		        }
+		      else
+				{
+					return "update_error";
+				}
+			  
+		        }
+		      catch(Exception e)
+		          {
+			            e.printStackTrace();
+			            return "error";
+		          }
+	}
+	public Orders getOrders() {
+		return orders;
+	}
+	public void setOrders(Orders orders) {
+		this.orders = orders;
+	}
+	public String getPaidweight() {
+		return paidweight;
+	}
+	public void setPaidweight(String paidweight) {
+		this.paidweight = paidweight;
+	}
+	public int getProductnumber() {
+		return productnumber;
+	}
+	public void setProductnumber(int productnumber) {
+		this.productnumber = productnumber;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public ISortingBizManager getSbiz() {
+		return sbiz;
+	}
+	public void setSbiz(ISortingBizManager sbiz) {
+		this.sbiz = sbiz;
+	}
+	public int getSortid() {
+		return sortid;
+	}
+	public void setSortid(int sortid) {
+		this.sortid = sortid;
+	}
+	public Date getSortingdate() {
+		return sortingdate;
+	}
+	public void setSortingdate(Date sortingdate) {
+		this.sortingdate = sortingdate;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public Date getTime() {
+		return time;
+	}
+	public void setTime(Date time) {
+		this.time = time;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public String getWeight() {
+		return weight;
+	}
+	public void setWeight(String weight) {
+		this.weight = weight;
+	}
+
+	public ArrayList<Warehouse> getWhlist() {
+		return whlist;
+	}
+	public void setWhlist(ArrayList<Warehouse> whlist) {
+		this.whlist = whlist;
+	}
+	public String getChkAll() {
+		return chkAll;
+	}
+	public void setChkAll(String chkAll) {
+		this.chkAll = chkAll;
+	}
+	public Warehouse getWh() {
+		return wh;
+	}
+	public void setWh(Warehouse wh) {
+		this.wh = wh;
+	}
+}

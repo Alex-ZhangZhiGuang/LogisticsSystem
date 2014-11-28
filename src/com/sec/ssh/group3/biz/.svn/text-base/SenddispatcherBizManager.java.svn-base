@@ -1,0 +1,63 @@
+package com.sec.ssh.group3.biz;
+import com.sec.ssh.group3.dao.ISenddispatcherDAOManager;
+import com.sec.ssh.group3.entity.*;
+
+import  java.util.*;
+
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+public class SenddispatcherBizManager implements ISenddispatcherBizManager
+{
+	//ÇÉÀö
+	private ISenddispatcherDAOManager sdDao;
+	
+	public ISenddispatcherDAOManager getSdDao()
+	{
+		return sdDao;
+	}
+
+	public void setSdDao(ISenddispatcherDAOManager sdDao) 
+	{
+		this.sdDao = sdDao;
+	}
+	public void addSendDispatcher(List<Senddispatcher> sd) 
+	{
+		for(Senddispatcher list:sd)
+			sdDao.addSendDispatcher(list);
+	}
+
+	public ArrayList<Senddispatcher> findAllSendDispatcher() 
+	{
+		return sdDao.findAllSendDispatcher();
+	}
+
+	public Senddispatcher findSendDispatcherById(int sdid) 
+	{
+		return sdDao.findSendDispatcherById(sdid);
+	}
+
+	public void updSenddispatcher(int sdid, Senddispatcher sd)
+	{
+		sdDao.updSenddispatcher(sdid, sd);
+	}
+
+	public ArrayList<Senddispatcher> findAllSenddispatcherByisdeal() 
+	{
+		return sdDao.findAllSenddispatcherByisdeal();
+	}
+	public ArrayList<Send> findAllSend()
+	{
+		return sdDao.findAllSend();
+	}
+
+	public Send findOneSend(int sid) 
+	{
+		return sdDao.findOneSend(sid);
+	}
+
+	public void updSendById(List<Send> s)
+	{
+		for(Send list:s)
+			sdDao.updSendById(list);	
+	}
+
+}

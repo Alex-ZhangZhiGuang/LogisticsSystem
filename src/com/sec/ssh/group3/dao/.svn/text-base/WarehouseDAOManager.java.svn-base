@@ -1,0 +1,60 @@
+package com.sec.ssh.group3.dao;
+
+import java.util.ArrayList;
+
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import com.sec.ssh.group3.entity.Orders;
+import com.sec.ssh.group3.entity.Warehouse;
+
+public class WarehouseDAOManager extends HibernateDaoSupport implements IWarehouseDAOManager {
+
+	public void add(Warehouse w) {
+		// TODO Auto-generated method stub
+		this.getHibernateTemplate().save(w);
+		
+	}
+
+	public Warehouse findId(int id) {
+		// TODO Auto-generated method stub
+		return (Warehouse) this.getHibernateTemplate().get(Warehouse.class, id);
+	}
+
+	public ArrayList<Orders> findOrderAll() {
+		// TODO Auto-generated method stub
+		return (ArrayList<Orders>) this.getHibernateTemplate().find("from Orders ");
+	}
+
+	public ArrayList<Warehouse> findWareAll() {
+		// TODO Auto-generated method stub
+		return (ArrayList<Warehouse>) this.getHibernateTemplate().find("from Warehouse ");
+	}
+
+	public void update(Warehouse w) {
+		// TODO Auto-generated method stub
+		this.getHibernateTemplate().update(w);
+		
+	}
+
+	public Orders findOrderId(int oid) {
+		// TODO Auto-generated method stub
+		return (Orders) this.getHibernateTemplate().get(Orders.class, oid);
+	}
+
+	public ArrayList<Orders> findOrderAllNotRk() {
+		// TODO Auto-generated method stub
+		return (ArrayList<Orders>) this.getHibernateTemplate().find("from Orders where statuswarehouse='0'");
+	}
+
+	public ArrayList<Warehouse> findWareAllNotCk() {
+		// TODO Auto-generated method stub
+		return (ArrayList<Warehouse>) this.getHibernateTemplate().find("from Warehouse where issign='1'and issort='1' and outdate is null ");
+	}
+
+	public void update(Orders o) {
+		// TODO Auto-generated method stub
+		this.getHibernateTemplate().update(o);
+		
+	}
+
+}

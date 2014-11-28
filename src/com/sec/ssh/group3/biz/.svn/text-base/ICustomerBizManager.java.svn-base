@@ -1,0 +1,11 @@
+package com.sec.ssh.group3.biz;
+import java.util.ArrayList;
+import com.sec.ssh.group3.entity.*;
+public interface ICustomerBizManager 
+{
+	//ºêºì
+	 void addCustomer(Customer c);
+     void   updateCustomer(Customer c);
+     ArrayList<Customer> findAllCustomer();
+     Customer findCustomerById(int cid);
+}

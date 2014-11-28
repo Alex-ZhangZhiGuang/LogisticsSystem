@@ -1,0 +1,341 @@
+package com.sec.ssh.group3.action;
+import java.util.*;
+import com.sec.ssh.group3.biz.ISenddispatcherBizManager;
+import com.sec.ssh.group3.biz.IWarehouseBizManager;
+import com.sec.ssh.group3.entity.*;
+
+public class WarehouseAction 
+{
+  private Warehouse w;
+  private IWarehouseBizManager biz;
+	private ArrayList<Warehouse> wdList;
+	private ArrayList<Orders> olist;
+	private int oid;
+	private String checkAllCk;
+	private int whid;
+	private String onumber;
+	private int statuswarehouse;
+	private String warehousenum;
+	private int paidinnumber;
+	private String whnumber;
+	private String whweight;
+	private int issendinfo;
+	private int issign;
+	private int issort;
+	private Date entrydate;
+	private Date outdate;
+	private String oids;
+	private String chkAll;
+	private Orders os;
+
+
+	public String getChkAll() {
+		return chkAll;
+	}
+	public void setChkAll(String chkAll) {
+		this.chkAll = chkAll;
+	}
+
+
+	public String getCheckAllCk() {
+		return checkAllCk;
+	}
+	public void setCheckAllCk(String checkAllCk) {
+		this.checkAllCk = checkAllCk;
+	}
+	public String getOids() {
+		return oids;
+	}
+	public void setOids(String oids) {
+		this.oids = oids;
+	}
+	public String getOnumber() {
+		return onumber;
+	}
+	public void setOnumber(String onumber) {
+		this.onumber = onumber;
+	}
+	public String getWhnumber() {
+		return whnumber;
+	}
+	public void setWhnumber(String whnumber) {
+		this.whnumber = whnumber;
+	}
+	public int getIssendinfo() {
+		return issendinfo;
+	}
+	public void setIssendinfo(int issendinfo) {
+		this.issendinfo = issendinfo;
+	}
+	public int getIssign() {
+		return issign;
+	}
+	public void setIssign(int issign) {
+		this.issign = issign;
+	}
+	public int getIssort() {
+		return issort;
+	}
+	public void setIssort(int issort) {
+		this.issort = issort;
+	}
+	public Date getEntrydate() {
+		return entrydate;
+	}
+	public void setEntrydate(Date entrydate) {
+		this.entrydate = entrydate;
+	}
+	public Date getOutdate() {
+		return outdate;
+	}
+	public void setOutdate(Date outdate) {
+		this.outdate = outdate;
+	}
+	public String getWarehousenum() {
+		return warehousenum;
+	}
+	public void setWarehousenum(String warehousenum) {
+		this.warehousenum = warehousenum;
+	}
+	public int getPaidinnumber() {
+		return paidinnumber;
+	}
+	public void setPaidinnumber(int paidinnumber) {
+		this.paidinnumber = paidinnumber;
+	}
+	public String getWhweight() {
+		return whweight;
+	}
+	public void setWhweight(String whweight) {
+		this.whweight = whweight;
+	}
+
+	
+	
+
+	public int getWhid() {
+		return whid;
+	}
+	public void setWhid(int whid) {
+		this.whid = whid;
+	}
+	public int getStatuswarehouse() {
+		return statuswarehouse;
+	}
+	public void setStatuswarehouse(int statuswarehouse) {
+		this.statuswarehouse = statuswarehouse;
+	}
+	public ArrayList<Orders> getOlist() {
+		return olist;
+	}
+	public void setOlist(ArrayList<Orders> list) {
+		olist = list;
+	}
+	public Warehouse getW() {
+		return w;
+	}
+	public void setW(Warehouse w) {
+		this.w = w;
+	}
+	public IWarehouseBizManager getBiz() {
+		return biz;
+	}
+	public void setBiz(IWarehouseBizManager biz) {
+		this.biz = biz;
+	}
+	public ArrayList<Warehouse> getWdList() {
+		return wdList;
+	}
+	public void setWdList(ArrayList<Warehouse> wdList) {
+		this.wdList = wdList;
+	}
+	
+	
+	public String findWareAll()
+	{
+		try
+		{
+			wdList=biz.findWareAll();
+			if(wdList.size()>0)
+			{
+			for(Warehouse w:wdList)
+			{
+					
+					System.out.println("入仓编号:"+w.getWhnumber()+"仓库号:"+w.getWarehousenum()+"实收数量:"+w.getPaidinnumber()+"重量:"+w.getWhweight()+"是否分拣:"+w.getIssort()+"入仓时间"+w.getEntrydate()+"出仓时间" +w.getOutdate()+   "产品类别:"+w.getOrders().getProducttype()+"数量"+w.getOrders().getProductname()+"运输方式:"+w.getOrders().getTransporttype()+"是否入库:"+w.getOrders().getStatuswarehouse()+"出仓时间: "+w.getOutdate());
+					for(Object o:w.getOrders().getOrdercustomers())
+					{
+						Ordercustomer oc=(Ordercustomer)o;
+						System.out.println("发往地:"+oc.getOcaddress());
+					}
+			}
+				return "findAll_success";
+			}
+			return "error";
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return "error";
+		}
+	}
+
+	public String findAllOrderNotRk()
+	{
+		try
+		{
+			olist=biz.findOrderAllNotRk();
+			if(olist.size()>0)
+			{
+			for(Orders order:olist)
+			{
+					
+					System.out.println("订单编号:"+order.getOnumber()+"产品类别:"+order.getProducttype()+"运输方式:"+order.getTransporttype()+"数量"+order.getProductname()+"委托单号" +order.getTrustid()+   "委托时间:"+order.getTrustdate()+" ");
+					for(Object ob:order.getOrdercustomers())
+					{
+						Ordercustomer oc=(Ordercustomer)ob;
+						System.out.println("收货人:"+oc.getOcname()+"联系电话:"+oc.getOcphone()+"收获地址:"+oc.getOcaddress());
+					}
+			}
+				return "findOrderAll_success";
+			}
+			return "error";
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return "error";
+		}
+	}
+	public String findAllWOrderNotCk()//查询仓库待出库全部
+	{
+		try {
+			
+		
+		wdList=biz.findWareAllNotCk();
+		if(wdList.size()>0)
+		{
+			for(Warehouse w:wdList)
+			{
+				System.out.println("入仓编号:"+w.getWhnumber()+"订单编号"+w.getOrders().getOnumber()+"产品类别"+w.getOrders().getProducttype()+"运输方式"+w.getOrders().getTransporttype()+"数量"+w.getOrders().getProductname()+"委托单号"+w.getOrders().getTrustid()+"委托时间:"+w.getOrders().getTrustdate());
+				for(Object o:w.getOrders().getOrdercustomers())
+				{
+					Ordercustomer oc=(Ordercustomer)o;
+					System.out.println("收货人:"+oc.getOcname()+"联系电话"+oc.getOcphone()+"收货地址:"+oc.getOcaddress());
+				}
+				
+			}
+			return "findWOrderAll_success";
+		}
+		return "error";
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return "error";
+		}
+
+	 
+	}
+	public String update()//仓库出库
+	{
+	   // Orders o= biz.findOrderId(checkAllCk);
+		//System.out.println("aaaaaaaaaaaaaaaa:"+checkAllCk);
+		String[] ss=this.checkAllCk.split(", ");
+		List<Warehouse> wlist=new ArrayList<Warehouse>();
+		for(String s:ss)
+		{
+			Warehouse w=biz.findId(Integer.valueOf(s));
+			   w.setOutdate(new Date());
+			   wlist.add(w);
+		}
+		
+	
+	 
+	  
+	
+	  
+		biz.wupdate(wlist);
+		return "update_success";
+		
+	}
+
+	public String add()
+	{
+		String[] ss=this.chkAll.split(",");
+		List<Warehouse> wlist=new ArrayList<Warehouse>();
+		List<Orders> olist=new ArrayList<Orders>();
+		for(String s:ss)
+		{		
+			Warehouse w=new Warehouse();
+			os=biz.findOrderId(Integer.valueOf(s));
+			System.out.println(os);
+		System.out.println(this.randomChar());
+		String ro=this.randomChar();
+		w.setWhnumber(ro);
+		w.setOrders(os);
+		w.setEntrydate(new Date());
+		w.setWhweight(whweight);
+		w.setWarehousenum(warehousenum);
+		w.setPaidinnumber(paidinnumber);
+		os.setStatuswarehouse(1);
+		olist.add(os);
+   
+  
+	/*
+	w.setOutdate(outdate);
+	w.setIssort(issort);
+	w.setIssendinfo(issendinfo);
+	w.setIssign(issign);
+	*/
+	wlist.add(w);
+	
+		}
+		try {
+			
+	      biz.addWhs(wlist);
+	      biz.update(olist);
+	      
+	  
+		return "success_add";
+		
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+			
+			// TODO: handle exception
+		}
+		
+	}
+	public int getOid() {
+		return oid;
+	}
+	public void setOid(int oid) {
+		this.oid = oid;
+	}
+	
+
+		public static String randomChar(){
+		String s="";
+		String str="ABCDEFGHIJKLMNOPQISTUVWXYZ";
+		for(int i=0;i<4;i++){
+			int ii=(int)(Math.random()*26);
+			s+=str.charAt(ii);
+		}
+		
+	    int sint=0;
+		String ss="";
+	    for (int i = 0; i < 6; i++) {
+		   Random rd=new Random();
+		   sint=rd.nextInt(10);
+		   ss+=sint;
+		 }  
+		return s+ss;
+	}
+		public Orders getOs() {
+			return os;
+		}
+		public void setOs(Orders os)
+		{
+			this.os = os;
+		}
+}

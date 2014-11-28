@@ -1,0 +1,39 @@
+package com.sec.ssh.group3.biz;
+
+import java.util.ArrayList;
+
+import com.sec.ssh.group3.dao.ICustomerDAO;
+import com.sec.ssh.group3.entity.Customer;
+
+public class CustomerBizManager implements ICustomerBizManager {
+	private ICustomerDAO cdao;
+
+	public void addCustomer(Customer c) {
+		// TODO Auto-generated method stub
+		cdao.addCustomer(c);
+	}
+
+	public ArrayList<Customer> findAllCustomer() {
+		// TODO Auto-generated method stub
+		return cdao.findAllCustomer();
+	}
+
+	public void updateCustomer(Customer c) {
+		// TODO Auto-generated method stub
+		cdao.updateCustomer(c);
+	}
+
+	public ICustomerDAO getDao() {
+		return cdao;
+	}
+
+	public void setDao(ICustomerDAO dao) {
+		this.cdao = dao;
+	}
+
+	public Customer findCustomerById(int cid) {
+		// TODO Auto-generated method stub
+		return cdao.findCustomerById(cid);
+	}
+
+}

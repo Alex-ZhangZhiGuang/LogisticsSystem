@@ -1,0 +1,15 @@
+package com.sec.ssh.group3.dao;
+import com.sec.ssh.group3.entity.*;
+
+import java.util.*;
+public interface IDeliverdispatcherDAOManager 
+{
+	//гиюЖ
+	Deliverdispatcher findDeliverDispatcherById(int drid);
+	ArrayList<Deliverdispatcher> findAllDeliverDispatcher();
+	void addDeliverDispatcher(Deliverdispatcher dr);
+	ArrayList<Orders> likeFindByArriveDate(String arriveDate);
+	void updDeliverdispatcher(int drid,Deliverdispatcher dr);
+	Senddispatcher findOneSenddispatcher(int sdid);
+	void updSenddispatcherById(Senddispatcher sd);
+}

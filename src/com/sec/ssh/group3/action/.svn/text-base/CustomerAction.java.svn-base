@@ -1,0 +1,206 @@
+package com.sec.ssh.group3.action;
+
+import java.util.ArrayList;
+
+import com.sec.ssh.group3.biz.ICustomerBizManager;
+import com.sec.ssh.group3.entity.Customer;
+import com.sec.ssh.group3.utils.RandomUtil;
+
+public class CustomerAction {
+	private ICustomerBizManager cbiz;
+	private ArrayList<Customer> clist;
+	private Customer c;
+	private int cid;
+	private String cnumber;
+	private String cname;
+	private String cityname;
+	private String cphone;
+	private String cemail;
+	private String cfax;
+	private String caddress;
+	private String receiptcode;
+	private String contactperson;
+	public String getCaddress() {
+		return caddress;
+	}
+	public void setCaddress(String caddress) {
+		this.caddress = caddress;
+	}
+	public String getCemail() {
+		return cemail;
+	}
+	public void setCemail(String cemail) {
+		this.cemail = cemail;
+	}
+	public String getCfax() {
+		return cfax;
+	}
+	public void setCfax(String cfax) {
+		this.cfax = cfax;
+	}
+	public int getCid() {
+		return cid;
+	}
+	public void setCid(int cid) {
+		this.cid = cid;
+	}
+	public String getCityname() {
+		return cityname;
+	}
+	public void setCityname(String cityname) {
+		this.cityname = cityname;
+	}
+	public String getCname() {
+		return cname;
+	}
+	public void setCname(String cname) {
+		this.cname = cname;
+	}
+
+	public String getContactperson() {
+		return contactperson;
+	}
+	public void setContactperson(String contactperson) {
+		this.contactperson = contactperson;
+	}
+	public String getCphone() {
+		return cphone;
+	}
+	public void setCphone(String cphone) {
+		this.cphone = cphone;
+	}
+	public String getReceiptcode() {
+		return receiptcode;
+	}
+	public void setReceiptcode(String receiptcode) {
+		this.receiptcode = receiptcode;
+	}
+	public Customer getC() {
+		return c;
+	}
+	public void setC(Customer c) {
+		this.c = c;
+	}
+	public ICustomerBizManager getCbiz() {
+		return cbiz;
+	}
+	public void setCbiz(ICustomerBizManager cbiz) {
+		this.cbiz = cbiz;
+	}
+	public ArrayList<Customer> getClist() {
+		return clist;
+	}
+	public void setClist(ArrayList<Customer> clist) {
+		this.clist = clist;
+	}
+	public String findCustomerCnumber()
+	{
+		 cnumber=RandomUtil.randomChar();
+		 return "suc_findCnumber";
+	}
+	public String add()
+	{
+		try
+		{
+		//System.out.println(time);
+		c=new Customer();
+		 cnumber=RandomUtil.randomChar();
+		 c.setCnumber(cnumber);
+	    c.setCid(cid);
+		c.setCname(cname);
+		c.setCphone(cphone);
+		c.setReceiptcode(receiptcode);
+		c.setCityname(cityname);
+		c.setCfax(cfax);
+		c.setCemail(cemail);
+		c.setContactperson(contactperson);
+		c.setCaddress(caddress);
+			cbiz.addCustomer(c);
+			return findall();
+			//return "success";
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			 return "error";
+		}
+	}
+	public String findall()
+	{
+		try
+		{
+		clist=cbiz.findAllCustomer();	
+		if(clist.size()>0)
+		{
+			for(Customer c:clist)
+			{
+				System.out.println("客户编号:"+c.getCid()+"客户名称:"+c.getCname()+"联系电话:"+c.getCphone()+"所在城市:"+c.getCityname()+"客户邮箱:"+c.getCemail()+"客户传真:"+c.getCfax()+"客户地址:"+c.getCaddress()+"收货代码:"+c.getReceiptcode()+"联系人:"+c.getContactperson());
+			}
+			return "suc_list";
+		}
+		
+		return "error";
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return "error";
+		}
+	}
+	public String updAllcustomer()
+	{
+		
+		Customer c= cbiz.findCustomerById(cid);
+		c.setCname(cname);
+		c.setCphone(cphone);
+		c.setReceiptcode(receiptcode);
+		c.setCityname(cityname);
+		c.setCfax(cfax);
+		c.setCemail(cemail);
+		c.setContactperson(contactperson);
+		c.setCaddress(caddress);
+		cbiz.updateCustomer(c);
+		return findall();
+	}
+	public String updCustomer()
+	{
+		
+		
+		System.out.println(cid);
+		Customer c= cbiz.findCustomerById(cid);
+		cname=c.getCname();
+		cphone=c.getCphone();
+		receiptcode=c.getReceiptcode();
+		cityname=c.getCityname();
+		cfax=c.getCfax();
+		cemail=c.getCemail();
+		contactperson=c.getContactperson();
+		caddress=c.getCaddress();
+		/*try{
+		     clist=cbiz.findAllCustomer();
+		      if(c!=null)
+		        {
+			        cbiz.updateCustomer(c);
+			         return findall();
+		        }
+		      else
+				{
+					return "update_error";
+				}
+			  
+		        }
+		      catch(Exception e)
+		          {
+			            e.printStackTrace();
+			            return "update_error";
+		          }*/
+		return "suc_updcustomer";
+	}
+	public String getCnumber() {
+		return cnumber;
+	}
+	public void setCnumber(String cnumber) {
+		this.cnumber = cnumber;
+	}
+}

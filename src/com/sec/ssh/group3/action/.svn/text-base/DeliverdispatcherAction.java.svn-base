@@ -1,0 +1,154 @@
+package com.sec.ssh.group3.action;
+
+import java.util.*;
+import com.opensymphony.xwork2.ActionContext;
+import com.sec.ssh.group3.biz.IDeliverdispatcherBizManager;
+import com.sec.ssh.group3.entity.*;
+/*
+ * DeliverdispatcherAction¿‡£®«…¿ˆ£©
+ */
+public class DeliverdispatcherAction 
+{
+	private IDeliverdispatcherBizManager drBiz;
+	private Deliverdispatcher dr;
+	private ArrayList<Deliverdispatcher> drList;
+	private Senddispatcher sd;
+	private Date senddate;
+	private Date arrivedate;
+	private String remark;
+	private String chkAll;
+
+	public String addDeliverdispatcher()
+	{
+		try 
+		{
+			String[] arr=chkAll.split(", ");
+			drList=new ArrayList<Deliverdispatcher>();
+			List<Senddispatcher> sdList=new ArrayList<Senddispatcher>();
+			for(String s:arr)
+			{
+				dr=new Deliverdispatcher();
+				sd=drBiz.findOneSenddispatcher(Integer.valueOf(s));
+				Orders o=new Orders();
+				o.setOid(sd.getOrders().getOid());
+				dr.setOrders(o);
+				dr.setArrivedate(arrivedate);
+				dr.setSenddate(senddate);
+				dr.setRemark(remark);
+				sd.setIsdeal(1);
+				drList.add(dr);
+				sdList.add(sd);
+			}
+			drBiz.addDeliverDispatchers(drList);
+			drBiz.updSenddispatcherById(sdList);
+			return "addDeliverdispatcher_success";
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return "error";
+		}
+	}
+	
+	public String findOneDeliverdispatcher()
+	{
+		try 
+		{
+			dr=drBiz.findDeliverDispatcherById(2);
+			if(dr!=null)
+				return "oneDeliverdispatcher_success";
+			return "error";
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			return "error";
+		}
+	}
+	
+	public String findAllDeliverdispatcher()
+	{
+		try 
+		{
+			drList=drBiz.findAllDeliverDispatcher();
+			if(drList.size()>0)
+			{
+				ActionContext.getContext().getSession().put("drList", drList);
+				return "allDeliverdispatcher_success";
+			}
+			return "error";
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			return "error";
+		}
+	}
+
+	public IDeliverdispatcherBizManager getDrBiz() 
+	{
+		return drBiz;
+	}
+	public void setDrBiz(IDeliverdispatcherBizManager drBiz) 
+	{
+		this.drBiz = drBiz;
+	}
+	public Deliverdispatcher getDr() 
+	{
+		return dr;
+	}
+	public void setDr(Deliverdispatcher dr) 
+	{
+		this.dr = dr;
+	}
+	public ArrayList<Deliverdispatcher> getDrList() 
+	{
+		return drList;
+	}
+
+	public void setDrList(ArrayList<Deliverdispatcher> drList) 
+	{
+		this.drList = drList;
+	}
+
+	public Date getSenddate() {
+		return senddate;
+	}
+
+	public void setSenddate(Date senddate) {
+		this.senddate = senddate;
+	}
+
+	public Date getArrivedate() {
+		return arrivedate;
+	}
+
+	public void setArrivedate(Date arrivedate) {
+		this.arrivedate = arrivedate;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getChkAll() {
+		return chkAll;
+	}
+
+	public void setChkAll(String chkAll) {
+		this.chkAll = chkAll;
+	}
+
+	public Senddispatcher getSd() {
+		return sd;
+	}
+
+	public void setSd(Senddispatcher sd) {
+		this.sd = sd;
+	}
+
+}

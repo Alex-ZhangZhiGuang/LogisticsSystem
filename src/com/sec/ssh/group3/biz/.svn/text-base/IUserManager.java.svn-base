@@ -1,0 +1,12 @@
+package com.sec.ssh.group3.biz;
+import com.sec.ssh.group3.entity.*;
+public interface IUserManager 
+{
+	 
+	   	void update(User u);	//User对象	void	用于修改用户信息
+	   	User  find(User u);//User对象	User	用于查询用户信息
+	   	Void add(User u);	//User对象	void	用于添加用户
+	 
+
+
+}

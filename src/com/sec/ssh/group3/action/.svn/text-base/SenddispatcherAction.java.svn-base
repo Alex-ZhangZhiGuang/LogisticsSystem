@@ -1,0 +1,219 @@
+package com.sec.ssh.group3.action;
+import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.struts2.interceptor.ServletRequestAware;
+import com.opensymphony.xwork2.ActionContext;
+import com.sec.ssh.group3.biz.ISenddispatcherBizManager;
+import com.sec.ssh.group3.entity.*;
+/*
+ * SenddispatcherAction¿‡£®«…¿ˆ£©
+ */
+public class SenddispatcherAction implements ServletRequestAware
+{
+	private ISenddispatcherBizManager sdBiz;
+	private ArrayList<Senddispatcher> sdList;
+	private ArrayList<Send> sList;
+	private Senddispatcher sd;
+	private Send send;
+	private HttpServletRequest req;
+	private Date senddate;
+	private Date arrivedate;
+	private String remark;
+	private String freightstation;
+	private String chkAll;
+
+	public String addSenddispatcher()
+	{
+		try 
+		{
+			String[] arr=chkAll.split(", ");
+			sdList=new ArrayList<Senddispatcher>();
+			List<Send> sList=new ArrayList<Send>();
+			for(String s:arr)
+			{
+				sd=new Senddispatcher();
+				send=sdBiz.findOneSend(Integer.valueOf(s));
+				Orders o=new Orders();
+				o.setOid(send.getOrders().getOid());
+				sd.setOrders(o);
+				sd.setArrivedate(arrivedate);
+				sd.setSenddate(senddate);
+				sd.setRemark(remark);
+				sd.setFreightstation(freightstation);
+				send.setIsdeal(1);
+				sdList.add(sd);
+				sList.add(send);
+			}
+			sdBiz.addSendDispatcher(sdList);
+			sdBiz.updSendById(sList);
+			return "addSenddispatcher_success";
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			return "error";
+		}
+	}
+	
+	public String findAllSend()
+	{
+		try
+		{
+			sList=sdBiz.findAllSend();
+			if(sList.size()>0)
+				return "allSend_success";
+			return "error";
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return "error";
+		}
+	}
+	public String findOneSenddispatcher()
+	{
+		try
+		{
+			sd=sdBiz.findSendDispatcherById(2);
+			if(sd!=null)
+				return "oneSenddispatcher_success";
+			return "error";
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return "error";
+		}
+	}
+	
+	public String findAllSenddispatcher()
+	{
+		try
+		{
+			sdList=sdBiz.findAllSendDispatcher();
+			if(sdList.size()>0)
+			{
+				return "allSenddispatcher_success";
+			}
+			return "error";
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return "error";
+		}
+	}
+	
+	public String findAllSenddispatcherByisdeal()
+	{
+		try
+		{
+			sdList=sdBiz.findAllSenddispatcherByisdeal();
+			if(sdList.size()>0)
+			{
+				return "allSenddispatcherByisdeal_success";
+			}
+			return "error";
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return "error";
+		}
+	}
+	public ISenddispatcherBizManager getSdBiz() 
+	{
+		return sdBiz;
+	}
+	public void setSdBiz(ISenddispatcherBizManager sdBiz) 
+	{
+		this.sdBiz = sdBiz;
+	}
+	public ArrayList<Senddispatcher> getSdList() 
+	{
+		return sdList;
+	}
+	public void setSdList(ArrayList<Senddispatcher> sdList) 
+	{
+		this.sdList = sdList;
+	}
+	public Senddispatcher getSd() 
+	{
+		return sd;
+	}
+	public void setSd(Senddispatcher sd) 
+	{
+		this.sd = sd;
+	}
+	public void setServletRequest(HttpServletRequest req) 
+	{
+		this.req=req;
+	}
+
+	public HttpServletRequest getReq() {
+		return req;
+	}
+
+	public void setReq(HttpServletRequest req) {
+		this.req = req;
+	}
+
+	public Date getSenddate() {
+		return senddate;
+	}
+
+	public void setSenddate(Date senddate) {
+		this.senddate = senddate;
+	}
+
+	public Date getArrivedate() {
+		return arrivedate;
+	}
+
+	public void setArrivedate(Date arrivedate) {
+		this.arrivedate = arrivedate;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getFreightstation() {
+		return freightstation;
+	}
+
+	public void setFreightstation(String freightstation) {
+		this.freightstation = freightstation;
+	}
+
+	public ArrayList<Send> getSList() {
+		return sList;
+	}
+
+	public void setSList(ArrayList<Send> list) {
+		sList = list;
+	}
+
+
+	public Send getSend() {
+		return send;
+	}
+
+	public void setSend(Send send) {
+		this.send = send;
+	}
+
+	public String getChkAll() {
+		return chkAll;
+	}
+
+	public void setChkAll(String chkAll) {
+		this.chkAll = chkAll;
+	}
+	
+
+}

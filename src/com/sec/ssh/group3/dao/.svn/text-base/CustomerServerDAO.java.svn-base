@@ -1,0 +1,110 @@
+package com.sec.ssh.group3.dao;
+
+import java.util.ArrayList;
+
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import com.sec.ssh.group3.entity.*;
+
+public class CustomerServerDAO extends HibernateDaoSupport implements ICustomerServerDAO{
+
+	public void addDeliver(Deliver d) {
+		
+		  this.getHibernateTemplate().save(d);
+	}
+
+	public void addOrder(Orders s) {
+		// TODO Auto-generated method stub
+	      this.getHibernateTemplate().save(s);
+	}
+
+	public void addSend(Send s) {
+		// TODO Auto-generated method stub
+		this.getHibernateTemplate().save(s);
+	}
+
+	public ArrayList<Sendsign> findOrderArrive() {
+		// TODO Auto-generated method stub
+		return (ArrayList<Sendsign>) this.getHibernateTemplate().find("from Sendsign");
+	}
+
+	public Orders findOrderById(String oid) {
+		ArrayList<Orders>list=(ArrayList<Orders>) this.getHibernateTemplate().find("from Orders where  oid='"+oid+"'");
+		return list.get(0);
+	}
+
+	public ArrayList<Orders> findOrderEnterWarehouse() {
+		// TODO Auto-generated method stub
+		return (ArrayList<Orders>) this.getHibernateTemplate().find("from Orders");
+	}
+
+	public ArrayList<Send> findOrderNoDeliver() {
+		// TODO Auto-generated method stub
+		return (ArrayList<Send>) this.getHibernateTemplate().find("from  Send  where isDeal=0 and transitCity is  null");
+	}
+
+	public ArrayList<Orders> findOrderNoSend() {
+		// TODO Auto-generated method stub
+		return  (ArrayList<Orders>) this.getHibernateTemplate().find("from  Orders  o  where o.warehouses.issendinfo=0 and o.warehouses.outdate is not null");
+	}
+
+	public ArrayList<Deliver> findOrderOkDeliver() {
+		// TODO Auto-generated method stub
+		return (ArrayList<Deliver>)this.getHibernateTemplate().find("from Deliver") ;
+	}
+
+	public ArrayList<Send> findOrderOkSend() {
+		// TODO Auto-generated method stub
+		return  (ArrayList<Send>) this.getHibernateTemplate().find("from  Send");
+	}
+
+	public Send findSendinfoByOid(String oid) {
+		// TODO Auto-generated method stub
+		ArrayList<Send> list=(ArrayList<Send>) this.getHibernateTemplate().find("from  Send s where s.orders.oid='"+oid+"'");
+		return list.get(0);
+	}
+
+	public void updSend(Send s) {
+		// TODO Auto-generated method stub
+		this.getHibernateTemplate().saveOrUpdate(s);
+		
+	}
+
+	public User findByUserId(String unumber) {
+		  ArrayList<User> list=(ArrayList<User>) this.getHibernateTemplate().find("from User where usernumber='"+unumber+"'");
+		  System.out.println(list.size());
+		return list.get(0);
+	}
+
+	public Warehouse findWarehouserInfoByOid(int oid) {
+		ArrayList<Warehouse> list=(ArrayList<Warehouse>) this.getHibernateTemplate().find("from  Warehouse  w where  w.orders.oid="+oid);
+		   return list.get(0);
+	}
+
+	public void updWarehouseState(Warehouse w) {
+		this.getHibernateTemplate().saveOrUpdate(w);
+		
+	}
+
+	public Customer findCustomerById(String cnum) {
+		ArrayList<Customer>list= (ArrayList<Customer>) this.getHibernateTemplate().find("from Customer  where cnumber='"+cnum+"'");
+		return list.get(0);
+	}
+
+	public User findByUserId(int uid) {
+		// TODO Auto-generated method stub
+		return (User) this.getHibernateTemplate().get(User.class, uid);
+	}
+
+	public void addOrderCustomer(Ordercustomer oc) {
+		// TODO Auto-generated method stub
+		this.getHibernateTemplate().save(oc);
+		
+	}
+
+	public ArrayList<Customer> findAllCustomer() {
+		// TODO Auto-generated method stub
+		return (ArrayList<Customer>) this.getHibernateTemplate().find("from Customer");
+	}
+
+}

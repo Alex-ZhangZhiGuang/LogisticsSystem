@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="configLocation"
+			value="classpath:hibernate.cfg.xml">
+		</property>
+	</bean>
+	<bean id="pages" class="com.sec.ssh.group3.utils.Page">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	<bean id="stools" class="com.sec.ssh.group3.utils.SearchTool">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<!-- SenddispatcherDAOManager配置（巧丽） -->
+	<bean id="sdDao" class="com.sec.ssh.group3.dao.SenddispatcherDAOManager">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	<!-- SenddispatcherBizManager配置（巧丽） -->
+	<bean id="sdBiz" class="com.sec.ssh.group3.biz.SenddispatcherBizManager" >
+		<property name="sdDao" ref="sdDao" />
+	</bean>
+	<!-- SenddispatcherAction配置（巧丽） -->
+	<bean id="sdAction" class="com.sec.ssh.group3.action.SenddispatcherAction">
+		<property name="sdBiz" ref="sdBiz" />
+		<property name="stool" ref="stools"/>
+	</bean>
+	<!-- DeliverdispatcherDAOManager配置（巧丽） -->
+	<bean id="drDao" class="com.sec.ssh.group3.dao.DeliverdispatcherDAOManager">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	<!-- DeliverdispatcherBizManager配置（巧丽） -->
+	<bean id="drBiz" class="com.sec.ssh.group3.biz.DeliverdispatcherBizManager" >
+		<property name="drDao" ref="drDao" />
+	</bean>
+	<!-- DeliverdispatcherAction配置（巧丽） -->
+	<bean id="drAction" class="com.sec.ssh.group3.action.DeliverdispatcherAction">
+		<property name="drBiz" ref="drBiz" />
+		<property name="stool" ref="stools"/>
+	</bean>
+	<!-- WarehouseDAOManager配置（荣辉） -->
+	<bean id="dao" class="com.sec.ssh.group3.dao.WarehouseDAOManager">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	<!-- WarehouseBizManager配置（荣辉） -->
+	<bean id="biz" class="com.sec.ssh.group3.biz.WarehouseBizManager">
+		<property name="dao" ref="dao"/>
+	</bean>
+	<!-- WarehouseAction配置（荣辉） -->
+	<bean id="Warehouseaction" class="com.sec.ssh.group3.action.WarehouseAction">
+		<property name="biz" ref="biz"></property>
+		<property name="stool" ref="stools"/>
+		<property name="page" ref="pages"/>
+	</bean>
+	<!-- CustomerDAO配置（宏红） -->
+	<bean id="cdao" class="com.sec.ssh.group3.dao.CustomerDAO">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	<!-- CustomerBizManager配置（宏红） -->
+	<bean id="cbiz" class="com.sec.ssh.group3.biz.CustomerBizManager" >
+		<property name="dao" ref="cdao" />
+	</bean>
+	<!-- CustomerAction配置（宏红） -->	
+	<bean id="customeraction" class="com.sec.ssh.group3.action.CustomerAction">
+		<property name="cbiz" ref="cbiz" />
+		<property name="stool" ref="stools"/>
+		<property name="page" ref="pages"/>
+	</bean>
+	<!-- CustomerServerDAO配置（勇强） -->
+	<bean id="customerserverdao" class="com.sec.ssh.group3.dao.CustomerServerDAO">
+  		<property name="hibernateTemplate" ref="hibernateTemplate"></property>
+  	</bean>
+  	<!-- CustomerServerBizManager配置（勇强） -->
+  	<bean id="customerserverbiz" class="com.sec.ssh.group3.biz.CustomerServerBizManager" >
+  		<property name="dao" ref="customerserverdao"></property>
+ 	</bean>
+ 	<!-- CustomerServerAction配置（勇强） -->
+  	<bean id="CustomerServerAction" class="com.sec.ssh.group3.action.CustomerServerAction">
+  		<property name="biz" ref="customerserverbiz" /> 
+  		<property name="stool" ref="stools"/>
+		<property name="page" ref="pages"/>
+	</bean>
+	<!-- OrderSignDAOManager配置（耀坤） -->
+	<bean id="osdao" class="com.sec.ssh.group3.dao.OrderSignDAOManager">
+	<property name="hibernateTemplate" ref="hibernateTemplate"></property>
+	</bean>
+	<!-- OrderSignBizManager配置（耀坤） -->
+	<bean id="osbiz" class="com.sec.ssh.group3.biz.OrderSignBizManager">
+	<property name="dao" ref="osdao"></property>
+	</bean>
+	<!-- OrderSignAction配置（耀坤） -->
+	<bean id="orderaction" class="com.sec.ssh.group3.action.OrderSignAction">
+	<property name="biz" ref="osbiz"></property>
+	</bean>
+ 	<!-- SendSignDAOManager配置（耀坤） -->
+	<bean id="ssdao" class="com.sec.ssh.group3.dao.SendSignDAOManager">
+	<property name="hibernateTemplate" ref="hibernateTemplate"></property>
+	</bean>
+	<!-- SendSignBizManager配置（耀坤） -->
+	<bean id="sbbiz" class="com.sec.ssh.group3.biz.SendSignBizManager">
+	<property name="dao" ref="ssdao"></property>
+	</bean>
+	<!-- SendSignAction配置（耀坤） -->
+	<bean id="sendsignaction" class="com.sec.ssh.group3.action.SendSignAction">
+	<property name="sbbiz" ref="sbbiz"></property>
+	</bean>
+	<!-- SortingDao配置（晓珍） -->
+	<bean id="sdao" class="com.sec.ssh.group3.dao.SortingDao">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	<!-- SortingBizManager配置（晓珍） -->
+	<bean id="sbiz" class="com.sec.ssh.group3.biz.SortingBizManager" >
+		<property name="sdao" ref="sdao" />
+	</bean>
+	<!-- SortingAction配置（晓珍） -->
+	<bean id="sortingaction" class="com.sec.ssh.group3.action.SortingAction">
+		<property name="biz" ref="sbiz" />
+		<property name="stool" ref="stools"/>
+		<property name="page" ref="pages"/>
+	</bean>
+	<!-- UserDao配置（罗萍） -->
+	<bean id="userdao" class="com.sec.ssh.group3.dao.UserDao">
+	     <property name="hibernateTemplate" ref="hibernateTemplate"></property>
+	</bean>
+	<!-- UserBiz配置（罗萍） -->
+	<bean id="userbiz" class="com.sec.ssh.group3.biz.UserBiz">
+	     <property name="dao" ref="userdao"></property>
+	</bean>
+	<!-- UserAction配置（罗萍） -->
+	<bean id="useraction" class="com.sec.ssh.group3.action.UserAction">
+	     <property name="biz" ref="userbiz" ></property>
+	</bean>
+	<!-- TransactionManager配置（巧丽） -->
+	<bean id="mytm" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- tx配置（巧丽） -->
+	<tx:advice id="myadvice" transaction-manager="mytm">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED"/>
+			<tx:method name="upd*" propagation="REQUIRED"/>
+			<tx:method name="del*" propagation="REQUIRED"/>
+			<tx:method name="find*" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	<!-- aop配置（巧丽） -->
+	<aop:config>
+		<aop:pointcut id="mypc" expression="execution(* com.sec.ssh.group3.biz.*.*(..))"/>
+		<aop:advisor advice-ref="myadvice" pointcut-ref="mypc"/>
+	</aop:config>
+</beans>

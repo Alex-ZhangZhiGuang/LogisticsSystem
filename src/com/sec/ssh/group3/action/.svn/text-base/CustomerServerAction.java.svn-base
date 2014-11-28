@@ -1,0 +1,446 @@
+package com.sec.ssh.group3.action;
+
+import java.util.ArrayList;
+import java.util.Date;
+import com.sec.ssh.group3.utils.*;
+
+import com.sec.ssh.group3.biz.ICustomerServerBizManager;
+
+
+import com.sec.ssh.group3.entity.*;
+
+public class CustomerServerAction {
+   //所有显示的list
+   private ArrayList<Orders> olist;
+   private ArrayList<Customer> clist;
+   private ArrayList<Ordercustomer> oclist;
+   private ArrayList<Send> slist;
+   private ArrayList<Sendsign> sglist;
+   private ArrayList<Deliver> dlist;
+   private ArrayList<Warehouse> wlist;
+   private ICustomerServerBizManager biz;
+/*   private IOrderCustomerManagerBiz ocbiz;
+   private ICustomerManagerBiz cbiz;
+   private IUserManagerBiz ubiz;
+   private IWarehouseManagerBiz wbiz;*/
+  //订单表的属性 
+   private int cid;
+   private String cnumber;
+   private int uid;
+   private String transport;
+   private String cname;
+   private String phone;
+   private String zipCode;
+   private String address;
+   private int productNum;
+   private String productType;
+   private String arrivalTime;
+   private String trustId;
+   private Date trustDate;
+   private String orderRemark;
+  //派送表的属性
+   private String chkAll;
+   private Date arriveDate;
+   private String unumber;
+   private String transitCity;
+   private String transportNumber;
+   //提货表的属性
+   //unumber
+   //chkAll
+    private Date deliveryDate;
+    private String remark;
+
+
+	public String findAlldetailOrder()
+	{
+		
+		//detailOrder查看入库操作的信息>入库详情
+		return "suc_detailOrder";
+	}
+	
+	public String addDeliver()
+	{
+		 System.out.println("添加提货表");
+		 System.out.println(chkAll);
+		   String list[]=chkAll.split(", ");
+		   for(int i=0;i<list.length;i++)
+		     {    
+			   Deliver d=new Deliver();
+			   d.setDeliverydate(deliveryDate);
+			   d.setRemark(remark);
+			   Orders o= biz.findOrderById(list[i]);
+			   d.setOrders(o);
+			   User u=biz.findByUserId(unumber);
+			   d.setUser(u);
+			   d.setIssendsigninfo(0);
+			   biz.addDeliver(d);
+			   Send s=biz.findSendinfoByOid(list[i]);
+			   s.setIsdeal(1);
+			   biz.updSend(s);
+		     }
+		   
+		return "suc_addDeliver";
+	}
+    public String addSendCall()
+   {
+	try
+	{
+	   System.out.println("添加派送表");
+	   System.out.println(chkAll);
+	   String list[]=chkAll.split(", ");
+	     for(int i=0;i<list.length;i++)
+	     {
+	    	System.out.println(list[i]);
+	    	Send s= new Send();
+	    	s.setArrivedate(arriveDate);
+	    	s.setIsdeal(0);
+	    	Orders o= biz.findOrderById(list[i]);
+	    	System.out.println(o.getProducttype());
+	    	s.setOrders(o);
+	       if(transitCity.equals("")||transitCity==null)
+	       {
+	    	   
+	       }
+	       else
+	       {
+	    	   s.setTransitcity(transitCity);
+	       }
+	    
+	    	User u= biz.findByUserId(unumber);
+	    	System.out.println(u.getCityname());
+	    	s.setUser(u);
+	        s.setTransportnumber(transportNumber);
+	    
+	        biz.addSend(s);
+	        Warehouse w= biz.findWarehouserInfoByOid(s.getOrders().getOid());
+	        System.out.println(w.getWarehousenum());
+	        
+	        w.setIssendinfo(1);
+	        biz.updWarehouseState(w);
+	        
+	        System.out.println("成功");
+	     //   biz.updWarehouseState(w);
+	       // System.out.println(s.getTransitCity()+s.getTransportNumber()+s.getArriveDate()+s.getOrderInfo().getOid()+u.getCityName());
+	     }
+	}
+	catch(Exception e)
+	{
+		e.printStackTrace();
+	}
+	   return "suc_addSend";
+	   
+   }
+   public String addOrder()
+   {
+	   System.out.println(cnumber);
+	   System.out.println(zipCode);
+	    System.out.println("入库操作---两张表 order 和 oc 表");
+	    Orders o= new Orders();
+	    o.setArrivaldate(arrivalTime);
+	    o.setOnumber(makeOrderNum.makeOrderNum());
+	   // o.setOnumber("SS12321");
+	    o.setTransporttype(transport);
+	    o.setZipcode(zipCode);
+	    o.setProductname(productNum);
+	    o.setProducttype(productType);
+	    o.setTrustid(trustId);
+	    o.setTrustdate(trustDate);
+	    o.setRemark(orderRemark);
+	    o.setCreatedate(new Date());
+	    o.setStatuswarehouse(0);
+	   // Customerinfo c=cbiz.findCustomerById(cid);
+	    
+	    Customer c=biz.findCustomerById(cnumber);
+	    
+	    User  u= biz.findByUserId(uid);
+	    o.setUser(u);
+	    o.setCustomer(c);
+	    biz.addOrder(o);
+	    System.out.println("sava  order success");
+	    Ordercustomer oc= new Ordercustomer();
+	    oc.setOcaddress(address);
+	    oc.setOcname(cname);
+	    oc.setOrders(o);
+	    oc.setOcphone(phone);
+	    oc.setRefceiptcode(c.getReceiptcode());
+	    biz.addOrderCustomer(oc);
+	    System.out.println("save  ordercustomer success");
+	    
+	    
+	   return "suc_add";
+	   
+   }
+   public String findAllCustoermerNo()
+   {
+	   
+	   System.out.println("查询客户编号列表");
+	   clist=biz.findAllCustomer();
+	   return "suc_CustoermerNo";
+	   
+	   
+   }
+   public String findAllNoSend()
+   {  
+	/*   System.out.println(ubiz);
+	   System.out.println(cbiz);
+	   System.out.println(ocbiz);*/
+	   
+	   System.out.println("派送通知列表");
+	   olist=biz.findOrderNoSend();
+	   System.out.println(olist.size());
+       return "suc_NoSend";
+	   
+   }
+   public String findOrderEnterWarehouse()
+   {
+	   System.out.println("查看入库信息");
+	   
+	    olist=biz.findOrderEnterWarehouse();
+	    System.out.println(olist.size());
+	   return "suc_EnterWarehouse";
+   }
+   public String findOrderArrive()
+   {
+	   sglist=biz.findOrderArrive();
+	   System.out.println("到货查看");
+	   return "suc_Arrive";
+	   
+   }
+   public String findOrderOkSend()
+   {
+	 System.out.println("查看派送通知"); 
+	 slist=biz.findOrderOkSend();
+	 System.out.println(slist.size());
+	 return "suc_OkSend";
+   }
+   
+   public String findOrderOkDeliver()
+   {
+		System.out.println("查看提货通知"); 
+		dlist=biz.findOrderOkDeliver();
+	   return "suc_OkDeliver";
+   }
+   public String findOrderNoDeliver()
+   {
+	   
+	   System.out.println("提货通知列表");
+	/*   try
+	   {*/
+	   slist=biz.findOrderNoDeliver();
+	   return "suc_NoDeliver";
+/*	   for(Sendinfo s:slist)
+	    {
+	       System.out.println(s.getTransitCity());	
+	       System.out.println(s.getOrderInfo().getCustomerinfo().getAddress());
+	       System.out.println(s.getOrderInfo().getOnumber());
+ 
+	    }
+	   }
+	   catch(Exception e)
+	   {
+		   e.printStackTrace();
+	   }*/
+	
+   }
+
+
+public ICustomerServerBizManager getBiz() {
+	return biz;
+}
+
+public void setBiz(ICustomerServerBizManager biz) {
+	this.biz = biz;
+}
+
+public int getCid() {
+	return cid;
+}
+public void setCid(int cid) {
+	this.cid = cid;
+}
+public String getTransport() {
+	return transport;
+}
+public void setTransport(String transport) {
+	this.transport = transport;
+}
+public String getCname() {
+	return cname;
+}
+public void setCname(String cname) {
+	this.cname = cname;
+}
+public String getPhone() {
+	return phone;
+}
+public void setPhone(String phone) {
+	this.phone = phone;
+}
+
+public String getZipCode() {
+	return zipCode;
+}
+public void setZipCode(String zipCode) {
+	this.zipCode = zipCode;
+}
+public String getAddress() {
+	return address;
+}
+public void setAddress(String address) {
+	this.address = address;
+}
+public int getProductNum() {
+	return productNum;
+}
+public void setProductNum(int productNum) {
+	this.productNum = productNum;
+}
+public String getProductType() {
+	return productType;
+}
+public void setProductType(String productType) {
+	this.productType = productType;
+}
+
+public String getTrustId() {
+	return trustId;
+}
+public void setTrustId(String trustId) {
+	this.trustId = trustId;
+}
+public Date getTrustDate() {
+	return trustDate;
+}
+public void setTrustDate(Date trustDate) {
+	this.trustDate = trustDate;
+}
+public String getOrderRemark() {
+	return orderRemark;
+}
+public void setOrderRemark(String orderRemark) {
+	this.orderRemark = orderRemark;
+}
+public int getUid() {
+	return uid;
+}
+public void setUid(int uid) {
+	this.uid = uid;
+}
+
+public String getCnumber() {
+	return cnumber;
+}
+public void setCnumber(String cnumber) {
+	this.cnumber = cnumber;
+}
+public String getChkAll() {
+	return chkAll;
+}
+public void setChkAll(String chkAll) {
+	this.chkAll = chkAll;
+}
+public Date getArriveDate() {
+	return arriveDate;
+}
+public void setArriveDate(Date arriveDate) {
+	this.arriveDate = arriveDate;
+}
+public String getUnumber() {
+	return unumber;
+}
+public void setUnumber(String unumber) {
+	this.unumber = unumber;
+}
+public String getTransitCity() {
+	return transitCity;
+}
+public void setTransitCity(String transitCity) {
+	this.transitCity = transitCity;
+}
+public String getTransportNumber() {
+	return transportNumber;
+}
+public void setTransportNumber(String transportNumber) {
+	this.transportNumber = transportNumber;
+}
+
+public Date getDeliveryDate() {
+	return deliveryDate;
+}
+public void setDeliveryDate(Date deliveryDate) {
+	this.deliveryDate = deliveryDate;
+}
+public String getRemark() {
+	return remark;
+}
+public void setRemark(String remark) {
+	this.remark = remark;
+}
+
+public ArrayList<Orders> getOlist() {
+	return olist;
+}
+
+public void setOlist(ArrayList<Orders> olist) {
+	this.olist = olist;
+}
+
+public ArrayList<Customer> getClist() {
+	return clist;
+}
+
+public void setClist(ArrayList<Customer> clist) {
+	this.clist = clist;
+}
+
+public ArrayList<Ordercustomer> getOclist() {
+	return oclist;
+}
+
+public void setOclist(ArrayList<Ordercustomer> oclist) {
+	this.oclist = oclist;
+}
+
+public ArrayList<Send> getSlist() {
+	return slist;
+}
+
+public void setSlist(ArrayList<Send> slist) {
+	this.slist = slist;
+}
+
+public ArrayList<Sendsign> getSglist() {
+	return sglist;
+}
+
+public void setSglist(ArrayList<Sendsign> sglist) {
+	this.sglist = sglist;
+}
+
+public ArrayList<Deliver> getDlist() {
+	return dlist;
+}
+
+public void setDlist(ArrayList<Deliver> dlist) {
+	this.dlist = dlist;
+}
+
+public ArrayList<Warehouse> getWlist() {
+	return wlist;
+}
+
+public void setWlist(ArrayList<Warehouse> wlist) {
+	this.wlist = wlist;
+}
+
+public String getArrivalTime() {
+	return arrivalTime;
+}
+
+public void setArrivalTime(String arrivalTime) {
+	this.arrivalTime = arrivalTime;
+}
+
+
+
+}

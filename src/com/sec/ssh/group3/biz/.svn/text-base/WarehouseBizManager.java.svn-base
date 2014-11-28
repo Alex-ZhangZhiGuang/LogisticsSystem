@@ -1,0 +1,87 @@
+package com.sec.ssh.group3.biz;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.sec.ssh.group3.dao.WarehouseDAOManager;
+import com.sec.ssh.group3.entity.Orders;
+import com.sec.ssh.group3.entity.Warehouse;
+
+public class WarehouseBizManager implements IWarehouseBizManager {
+	private WarehouseDAOManager dao;
+	
+	
+
+	public WarehouseDAOManager getDao() {
+		return dao;
+	}
+
+	public void setDao(WarehouseDAOManager dao) {
+		this.dao = dao;
+	}
+/*
+	public void add(Warehouse w) {
+		// TODO Auto-generated method stub
+		dao.add(w);
+		
+	}
+*/
+	public Warehouse findId(int id) {
+		// TODO Auto-generated method stub
+		return dao.findId(id);
+	}
+
+	public ArrayList<Orders> findOrderAllNotRk() {
+		// TODO Auto-generated method stub
+		return dao.findOrderAllNotRk();
+	}
+
+	public ArrayList<Warehouse> findWareAll() {
+		// TODO Auto-generated method stub
+		return dao.findWareAll();
+	}
+
+	
+
+	public Orders findOrderId(int oid) {
+		// TODO Auto-generated method stub
+		return dao.findOrderId(oid);
+	}
+
+	public ArrayList<Orders> findOrderAll() {
+		// TODO Auto-generated method stub
+		return dao.findOrderAll();
+	}
+
+	public void addWhs(List<Warehouse> ws) {
+		// TODO Auto-generated method stub
+		for(Warehouse wlist:ws)
+		{
+			dao.add(wlist);
+		}
+		
+	}
+
+	public ArrayList<Warehouse> findWareAllNotCk() {
+		// TODO Auto-generated method stub
+		return dao.findWareAllNotCk();
+	}
+
+	public void update(List<Orders> os) {
+		// TODO Auto-generated method stub
+		for(Orders olist:os)
+		{
+		dao.update(olist);
+		}
+	}
+
+	public void wupdate(List<Warehouse> ws) {
+		// TODO Auto-generated method stub
+		for(Warehouse wdlist:ws)
+		{
+			dao.update(wdlist);
+		}
+		
+	}
+
+}

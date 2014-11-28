@@ -1,0 +1,342 @@
+package com.sec.ssh.group3.action;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+
+import com.opensymphony.xwork2.ActionContext;
+import com.sec.ssh.group3.biz.IUserBiz;
+import com.sec.ssh.group3.entity.User;
+import com.sec.ssh.group3.utils.MD5util;
+
+public class UserAction {
+	private IUserBiz<User> userbiz;
+	private ArrayList<User> list;
+	private User user;
+	private String massger;
+	
+	private int userid;
+	private String usernumber;
+	private String username;
+	private String userpwd;
+	private String userpwdnew;
+	private String userphone;
+	private int isservice;
+	private int roleid;
+	private String cityname;
+	private Date createdate;
+			
+	/**
+	 * 添加user数据  
+	 * @return SUCCESS
+	 * 用户名不能重复..
+	 * 编号不能重复
+	 * 电话不能重复
+	 * 给定系统时间
+	 * 用户角色默认为0
+	 */
+	public String adduser(){
+		try {
+			user=new User();
+			user.setUsernumber(usernumber);//工号
+			user.setUsername(username);//用户名
+			System.out.println(userpwd);
+			user.setUserpwd(userpwd);
+		   // user.setUserpwd(MD5util.getMD5Str(userpwd));//密码
+			user.setCreatedate(new Date());	//得到默认时间
+			user.setRoleid(roleid);//用户角色
+			user.setCityname(cityname);//城市
+			user.setUserphone(userphone);//电话
+			userbiz.add(user);
+			return findall();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			 return "ERROR";
+		}
+	}
+	
+	// 添加时添加的是系统默认时间，判断用户名是否存在，判断联系方式是否重复 
+	
+	/**
+	 * 根据id查询用户信息
+	 * @return finByidSUCCESS
+	 */
+	public String finByid(){
+		user=new User();
+		try {
+			 user=userbiz.findByid(userid);
+			 System.out.println(user.getUserid()+"——————findbyid");
+			  return "finByidSUCCESS";
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return "ERROR";
+		}
+	}
+	/**
+	 * 修改user数据  
+	 * @return  修改成功返回 updateSUCCESS
+	 */
+	public String updateuser(){
+		try {	
+			user.setUsername(username);
+			user.setUserphone(userphone);
+			user.setCreatedate(createdate);
+			user.setIsservice(isservice);
+			user.setCreatedate(new Date());
+			userbiz.update(user);
+			return findall();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return"ERROR";
+		}
+	}
+
+	/**
+	 * 修改用户密码
+	 * @return  updatenameSUCESS;
+	 */
+	public String updatepwd(){
+		//根据id  
+		
+		//要判断原密码
+		try {
+			
+			list=(ArrayList<User>) userbiz.login(username, userpwd);
+			 if(!list.isEmpty()||list.size()!=0)
+			 {
+				User u = (User) ActionContext.getContext().getSession().get("user");//保存在session中
+				userid = u.getUserid();
+				System.out.println(userid+"userid");
+				user=new User();
+				user=userbiz.findByid(userid);
+				user.setUsername(username);
+				user.setUserpwd(userpwdnew);
+			
+				userbiz.update(user);
+				return "updatepwdSUCCESS";
+			 }
+			 else
+			 {
+				 massger="密码错误，请重新输入";
+				 return "updatenameERROR";
+			 }
+				 
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return "ERROR";
+		}
+
+	}
+	/**
+	 * 查询全部user数据
+	 * @return SUCCESS
+	 */
+	public String findall(){
+		list=(ArrayList<User>) userbiz.findall();
+		if(!list.isEmpty()){
+		  return "findallSUCCESS";
+		}
+		if(list.size()==0){
+			massger="没有数据";
+		}
+		return "ERROR";
+	}
+
+
+	/**
+	 * 根据用户名查询用户名
+	 * @return   findnameSUCCESS
+	 */
+	
+	public String findname(){
+		
+			System.out.println(username+"loginUsername");
+			list=(ArrayList<User>) userbiz.findname(username);
+			if(!list.isEmpty()){
+				System.out.println(list.size());
+
+				return "findnameSUCCESS";
+			}else
+			{
+				return "ERROR";
+			}
+			
+	}
+	
+	/**
+	 * 用户登录
+	 * @return
+	 */
+	public String login(){
+			//userpwd=MD5util.getMD5Str(userpwd);
+			list=(ArrayList<User>) userbiz.login(username, userpwd);
+			System.out.println(list.size()+"--list.size()");
+	            if(!list.isEmpty()||list.size()!=0){ 	
+	        		  System.out.println(list.size()+"--list--");
+	        	      ActionContext ac=ActionContext.getContext();
+	                  ac.getSession().put("user",list.get(0));//保存在session中
+	                  
+	              	  return "loginSUCCESS";
+	              }
+	            else{
+	            	 massger="用户名或密码错误，请重新输入";
+	 	             return "loginERROR";
+	            }  
+	}
+	
+	/**
+	 * 退出时清空session中的内容
+	 * @return SUCCESS
+	 */
+	public String session(){
+		ActionContext ac=ActionContext.getContext();
+		ac.getSession().put("userinfo",null);
+		return "SUCCESS";
+	}
+
+	/**
+	 * 显示添加用户页面
+	 * @return showadduser
+	 */
+	public String showAdduser()
+	{
+		System.out.println("hello  跳转吧~~");
+		return "showadduser";
+	}
+	
+	/**
+	 * 跳转到修好密码页面
+	 * @return
+	 */
+	public String showUpdatepwd(){
+		return "showupdatepwd";
+	}
+	
+	
+	public IUserBiz<User> getBiz() {
+		return userbiz;
+	}
+
+	public void setBiz(IUserBiz<User> userbiz) {
+		this.userbiz = userbiz;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getMassger() {
+		return massger;
+	}
+
+	public void setMassger(String massger) {
+		this.massger = massger;
+	}
+
+	public int getUserid() {
+		return userid;
+	}
+
+	public void setUserid(int userid) {
+		this.userid = userid;
+	}
+
+	public String getUsernumber() {
+		return usernumber;
+	}
+
+	public void setUsernumber(String usernumber) {
+		this.usernumber = usernumber;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getUserpwd() {
+		return userpwd;
+	}
+
+	public void setUserpwd(String userpwd) {
+		this.userpwd = userpwd;
+	}
+
+	public String getUserphone() {
+		return userphone;
+	}
+
+	public void setUserphone(String userphone) {
+		this.userphone = userphone;
+	}
+
+	public int getIsservice() {
+		return isservice;
+	}
+
+	public void setIsservice(int isservice) {
+		this.isservice = isservice;
+	}
+
+	public int getRoleid() {
+		return roleid;
+	}
+
+	public void setRoleid(int roleid) {
+		this.roleid = roleid;
+	}
+
+	public String getCityname() {
+		return cityname;
+	}
+
+	public void setCityname(String cityname) {
+		this.cityname = cityname;
+	}
+
+	public Date getCreatedate() {
+		return createdate;
+	}
+
+	public void setCreatedate(Date createdate) {
+		this.createdate = createdate;
+	}
+
+	public ArrayList<User> getList() {
+		return list;
+	}
+
+	public void setList(ArrayList<User> list) {
+		this.list = list;
+	}
+
+	public IUserBiz<User> getUserbiz() {
+		return userbiz;
+	}
+
+	public void setUserbiz(IUserBiz<User> userbiz) {
+		this.userbiz = userbiz;
+	}
+
+	public String getUserpwdnew() {
+		return userpwdnew;
+	}
+
+	public void setUserpwdnew(String userpwdnew) {
+		this.userpwdnew = userpwdnew;
+	}
+
+	
+
+}

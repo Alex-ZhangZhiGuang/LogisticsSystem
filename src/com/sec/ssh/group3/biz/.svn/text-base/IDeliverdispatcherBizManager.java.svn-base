@@ -1,0 +1,14 @@
+package com.sec.ssh.group3.biz;
+import com.sec.ssh.group3.entity.*;
+import java.util.*;
+public interface IDeliverdispatcherBizManager 
+{
+	//гиюЖ
+	Deliverdispatcher findDeliverDispatcherById(int drid);
+	ArrayList<Deliverdispatcher> findAllDeliverDispatcher();
+	void addDeliverDispatchers(List<Deliverdispatcher> dr);
+	ArrayList<Orders> likeFindByArriveDate(String arriveDate);
+	void updDeliverdispatcher(int drid,Deliverdispatcher dr);
+	Senddispatcher findOneSenddispatcher(int sdid);
+	void updSenddispatcherById(List<Senddispatcher> sd);
+}

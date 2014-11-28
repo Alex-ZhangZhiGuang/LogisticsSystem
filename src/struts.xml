@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+	"http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.i18n.encoding" value="gbk"></constant>
+	<package name="ssh" extends="struts-default">
+		<interceptors> 
+			<interceptor name="authority" class="com.sec.ssh.group3.utils.roleIdInterceptor"/>
+			<interceptor-stack name="myInterceptor"> 
+				<interceptor-ref name="defaultStack"></interceptor-ref> 
+				<interceptor-ref name="authority" ></interceptor-ref> 
+			</interceptor-stack> 
+		</interceptors> 
+		<!-- 巧丽SenddispatcherAction -->
+		<action name="sd" class="sdAction">
+			<result name="allSenddispatcher_success">/page/manageDispatch.jsp</result>
+			<result name="allSenddispatcherByisdeal_success">/page/addGoodsDispatch.jsp</result>
+			<result name="addSenddispatcher_success" type="redirect">sd!findAllSend.action</result>
+			<result name="allSend_success">/page/addDispatch.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="suc_list">/page/manageDispatch.jsp</result>
+			<result name="err">/err.jsp</result>
+			<interceptor-ref name="myInterceptor"/> 
+		</action>
+		<!-- 巧丽DeliverdispatcherAction -->
+		<action name="dr" class="drAction">
+			<result name="allDeliverdispatcher_success">/page/manageGoodsDispatch.jsp</result>
+			<result name="addDeliverdispatcher_success" type="redirect">sd!findAllSenddispatcherByisdeal.action</result>
+			<result name="error">/error.jsp</result>
+			<result name="suc_list">/page/manageGoodsDispatch.jsp</result>
+			<result name="err">/err.jsp</result>
+			<interceptor-ref name="myInterceptor"/> 
+		</action>
+		<!-- 荣辉WarehouseAction -->
+		<action name="Warehouseaction" class="Warehouseaction">
+			<result name="findAll_success">/page/manageStoreHouse.jsp</result>
+			<result name="findWOrderAll_success">/page/addOutStoreHouse.jsp</result>
+			<result name="findOrderAll_success">/page/addStoreHouse.jsp</result>
+			<result name="update_success" type="redirect">Warehouseaction!findAllWOrderNotCk.action</result>
+			<result name="success_add" type="redirect">Warehouseaction!findAllOrderNotRk.action</result>
+			<result name="error">error.jsp</result>
+			<result name="err">/err.jsp</result>
+			<interceptor-ref name="myInterceptor"/> 
+		</action>
+   		<!-- 勇强CustomerServerAction -->
+   		<action name="service" class="CustomerServerAction">
+		   	<result name="suc_NoSend">/page/addSendCall.jsp</result>
+		   	<result name="suc_NoDeliver">/page/addDoCall.jsp</result>
+		   	<result name="suc_Arrive">/page/manageArrive.jsp</result>
+		   	<result name="suc_EnterWarehouse">/page/manageOrder.jsp</result>
+		   	<result name="suc_add" type="redirectAction">service!findOrderEnterWarehouse.action</result>
+		   	<result name="success">/page/manageArrive.jsp</result>
+		   	<result name="suc_OkSend">/page/manageSendCall.jsp</result>
+		   	<result name="suc_OkDeliver">/page/manageDoCall.jsp</result>
+		   	<result name="suc_CustoermerNo">/page/addOrder.jsp</result>
+		   	<result name="suc_addSend" type="redirectAction">service!findOrderOkSend.action</result>
+		   	<result name="suc_addDeliver" type="redirectAction">service!findOrderOkDeliver.action</result>
+		   	<result name="error">error.jsp</result>
+		   	<result name="err">/err.jsp</result>
+		   	<interceptor-ref name="myInterceptor"/> 
+       	</action>
+       	<!-- 耀坤OrderSignAction -->
+       	<action name="login" class="orderaction">
+			<result name="findAll_success">/page/addSign.jsp</result>
+			<result name="success_add" type="redirect">login!findall</result>
+			<result name="error">/error.jsp</result>
+			<result name="err">/err.jsp</result>
+			<interceptor-ref name="myInterceptor"/> 
+		</action>
+		<!-- 耀坤SendSignAction -->
+		<action name="login1" class="sendsignaction">
+			<result name="findAll_success">/page/addDispatchSign.jsp</result>
+			<result name="success_add" type="redirect">login1!findall</result>
+			<result name="error">/error.jsp</result>
+			<result name="err">/err.jsp</result>
+			<interceptor-ref name="myInterceptor"/> 
+		</action>
+		<!-- 晓珍SortingAction -->
+		<action name="s" class="sortingaction">
+			<result name="suc_list">/page/manageSorting.jsp</result>
+			<result name="success">/page/addSorting.jsp</result>
+			<result name="add_success" type="redirect">s!findSortingDo.action</result>
+			<result name="update_success" type="redirect">s!findall.action</result>
+			<result name="error">/error.jsp</result>
+			<result name="err">/err.jsp</result>
+			<interceptor-ref name="myInterceptor"/> 
+	   	</action>
+	   	<!-- 宏红CustomerAction--> 
+		<action name="c" class="customeraction">
+			<result name="suc_list">/page/manageCustomer.jsp</result>
+			<result name="success">/page/addCustomer.jsp</result>
+			<result name="error">/error.jsp</result>
+		    <result name="suc_findCnumber">/page/addCustomer.jsp</result>
+		    <result name="suc_updcustomer">/page/updateCustomer.jsp</result>
+		    <result name="err">/err.jsp</result>
+		    <interceptor-ref name="myInterceptor"/> 
+   		</action> 
+   		
+	   	<!-- 罗萍UserAction -->
+  		<action name="user" class="useraction">
+	       <result name="loginSUCCESS">index.jsp</result>
+	       <result name="loginERROR">login.jsp</result>
+	       <result name="findallSUCCESS">/page/manageUser.jsp</result>
+	       <result name="finByidSUCCESS">/page/updateUser.jsp</result>
+	        <result name="updateSUCCESS" type="redirect">user!findall.action</result>
+	        <result name="add_success" type="redirect">user!findall.action</result>
+	       <result name="ERROR">/error.jsp</result>
+	       <result name="err">/err.jsp</result>
+	       <interceptor-ref name="myInterceptor"/> 
+	     </action>
+	</package>
+	
+	<package name="jsonDefault" extends="json-default">
+	<action name="ck" class="customeraction">
+		<result type="json"/>		
+   	</action>
+		
+	</package>
+</struts>

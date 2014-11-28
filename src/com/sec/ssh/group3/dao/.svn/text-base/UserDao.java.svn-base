@@ -1,0 +1,46 @@
+package com.sec.ssh.group3.dao;
+
+import java.io.Serializable;
+import java.util.List;
+
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+
+public class UserDao<T> extends HibernateDaoSupport implements IUserDao<T> {
+
+	/**
+	 * 添加数据
+	 */
+	public void add(T entity) {
+		// TODO Auto-generated method stub
+		this.getHibernateTemplate().save(entity);
+	}	
+    /**
+     * 修改数据
+     */
+	public void update(T entity) {
+		// TODO Auto-generated method stub
+		this.getHibernateTemplate().update(entity);
+	}
+	
+	/**
+	 * 根据id查询 返回单行数据
+	 */
+	public T findByid(Class clz, Serializable id) {
+		// TODO Auto-generated method stub
+		return (T) this.getHibernateTemplate().get(clz, id);
+	}
+
+	/**
+	 * 条件查询
+	 */
+	public List<T> find(String sql) {
+		// TODO Auto-generated method stub
+		return this.getHibernateTemplate().find(sql);
+	}
+	public List<T> login(String username, String userpwd) {
+		// TODO Auto-generated method stub
+		return  this.getHibernateTemplate().find("from  User  where username='"+username+"' and to_char(userpwd)='"+userpwd+"'");
+	}
+
+}
